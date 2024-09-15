@@ -1,7 +1,6 @@
 ﻿
 $(document).ready(function () {
     if (obj) {
-        console.log(obj)
         $('#formCadastro #Nome').val(obj.Nome);
         $('#formCadastro #CEP').val(obj.CEP);
         $('#formCadastro #Email').val(obj.Email);

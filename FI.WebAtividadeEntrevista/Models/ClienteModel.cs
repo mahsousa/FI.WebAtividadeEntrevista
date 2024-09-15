@@ -1,4 +1,5 @@
 ﻿using FI.WebAtividadeEntrevista.Atributes;
+using FI.WebAtividadeEntrevista.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -80,6 +81,11 @@ namespace WebAtividadeEntrevista.Models
         /// CPF inicial é o valor do CPF antes de qualquer alteração
         /// </summary>
         public string CPFInicial { get; set; }
+
+        /// <summary>
+        /// Lista de Beneficiarios
+        /// </summary>
+        public List<BeneficiarioModel> Beneficiarios { get; set; }
 
     }    
 }

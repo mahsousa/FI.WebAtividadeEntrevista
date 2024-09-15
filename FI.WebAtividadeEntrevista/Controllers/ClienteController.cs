@@ -39,6 +39,10 @@ namespace WebAtividadeEntrevista.Controllers
             else
             {
 
+                List<Beneficiario> beneficiarios = new List<Beneficiario>();
+                foreach(var benef in model.Beneficiarios)
+                    beneficiarios.Add(new Beneficiario() { CPF = benef.CPF, Nome = benef.Nome });
+
                 model.Id = bo.Incluir(new Cliente()
                 {
                     CEP = model.CEP,
@@ -50,7 +54,8 @@ namespace WebAtividadeEntrevista.Controllers
                     Nome = model.Nome,
                     Sobrenome = model.Sobrenome,
                     Telefone = model.Telefone,
-                    CPF = new string(model.CPF.Where(char.IsDigit).ToArray())
+                    CPF = model.CPF,
+                    Beneficiarios = beneficiarios
                 });
 
            

@@ -37,11 +37,24 @@ namespace FI.AtividadeEntrevista.DAL
             parametros.Add(new SqlParameter("Telefone", cliente.Telefone));
             parametros.Add(new SqlParameter("CPF", cliente.CPF));
 
+            var beneficiariosTable = new DataTable();
+            beneficiariosTable.Columns.Add("CPF", typeof(string));
+            beneficiariosTable.Columns.Add("Nome", typeof(string));
+
+            var beneficiariosString = string.Join(";", cliente.Beneficiarios.Select(b => $"{b.CPF}.{b.Nome}"));
+            parametros.Add(new SqlParameter("@BENEFICIARIOS", SqlDbType.NVarChar)
+            {
+                Value = beneficiariosString,
+                Size = -1 // Para NVARCHAR(MAX)
+            });
+
+
             DataSet ds = base.Consultar(ProcIncCliente, parametros);
             long ret = 0;
             if (ds.Tables[0].Rows.Count > 0)
                 long.TryParse(ds.Tables[0].Rows[0][0].ToString(), out ret);
             return ret;
+            
         }
 
         /// <summary>
@@ -164,6 +177,21 @@ namespace FI.AtividadeEntrevista.DAL
                     cli.Sobrenome = row.Field<string>("Sobrenome");
                     cli.Telefone = row.Field<string>("Telefone");
                     cli.CPF = row.Field<string>("CPF");
+
+                    if(ds.Tables.Count > 1 && ds.Tables[1].Rows.Count > 0)
+                    {
+                        foreach (DataRow benefRow in ds.Tables[1].Rows)
+                        {
+                            Beneficiario benef = new Beneficiario();
+                            benef.Id = row.Field<long>("Id");
+                            benef.IdCliente = row.Field<long>("Id");
+                            benef.Nome = row.Field<string>("Nome");
+                            benef.CPF = row.Field<string>("CPF");
+                            cli.Beneficiarios.Add(benef);
+                        }
+                        
+                    }
+
                     lista.Add(cli);
                 }
             }

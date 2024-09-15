@@ -1,6 +1,8 @@
-﻿using System;
+﻿using FI.AtividadeEntrevista.DML;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +17,11 @@ namespace FI.AtividadeEntrevista.BLL
         public long Incluir(DML.Cliente cliente)
         {
             DAL.DaoCliente cli = new DAL.DaoCliente();
+            cliente.CPF = ObterSomenteDigitosCPF(cliente.CPF);
+            foreach (var benef in cliente.Beneficiarios)
+                benef.CPF = ObterSomenteDigitosCPF(benef.CPF);
+
+
             return cli.Incluir(cliente);
         }
 
@@ -76,8 +83,13 @@ namespace FI.AtividadeEntrevista.BLL
         public bool VerificarExistencia(string cpf)
         {
             DAL.DaoCliente cli = new DAL.DaoCliente();
-            cpf = new string(cpf.Where(char.IsDigit).ToArray());
+            cpf = ObterSomenteDigitosCPF(cpf);
             return cli.VerificarExistencia(cpf);
+        }
+
+        private string ObterSomenteDigitosCPF(string cpf)
+        {
+            return new string(cpf.Where(char.IsDigit).ToArray());
         }
     }
 }

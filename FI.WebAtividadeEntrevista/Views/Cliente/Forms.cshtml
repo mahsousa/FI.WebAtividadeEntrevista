@@ -80,13 +80,75 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-6">
+            <!-- Botão para abrir o modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal">
+                Beneficiários
+            </button>
+        </div>
+        <div class="col-lg-6">
             <div class="pull-right">
                 <button type="submit" class="btn btn-sm btn-success">Salvar</button>
                 @Html.ActionLink("Voltar", "Index", "Cliente", new { }, new { @class = "btn btn-sm btn-danger" })
             </div>
         </div>
     </div>
-
-
 </form>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="exampleModalLabel">
+                    Beneficiários
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="CPFBenef">CPF:</label>
+                            <input required="required" type="text" class="form-control" id="CPFBenef" name="CPFBenef" placeholder="Ex.: 010.011.111-00" maxlength="14">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="NomeBenef">Nome:</label>
+                            <input required="required" type="text" class="form-control" id="NomeBenef" name="NomeBenef" placeholder="Ex.: João" maxlength="50">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" id="btn-beneficiario" class="btn btn-sm btn-success form-control">Incluir</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>CPF</th>
+                                    <th>Nome</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Linhas da tabela serão inseridas aqui -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
