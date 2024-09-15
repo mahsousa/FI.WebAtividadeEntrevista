@@ -1,6 +1,7 @@
 ﻿using FI.AtividadeEntrevista.BLL;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using WebAtividadeEntrevista.Models;
 
 namespace FI.WebAtividadeEntrevista.Atributes
 {
@@ -20,12 +21,16 @@ namespace FI.WebAtividadeEntrevista.Atributes
                 return new ValidationResult("CPF inválido.");
             }
 
-            if (!CpfUnico(cpf))
+            var model = validationContext.ObjectInstance as ClienteModel;
+            cpf = new string(cpf.Where(char.IsDigit).ToArray());
+
+            if (cpf != model.CPFInicial && !CpfUnico(cpf))
             {
                 return new ValidationResult("CPF já está registrado.");
             }
 
             return ValidationResult.Success;
+
         }
 
         private bool CpfValido(string cpf)

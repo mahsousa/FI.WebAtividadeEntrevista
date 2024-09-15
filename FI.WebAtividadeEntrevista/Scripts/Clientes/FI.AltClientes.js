@@ -1,6 +1,7 @@
 ﻿
 $(document).ready(function () {
     if (obj) {
+        console.log(obj)
         $('#formCadastro #Nome').val(obj.Nome);
         $('#formCadastro #CEP').val(obj.CEP);
         $('#formCadastro #Email').val(obj.Email);
@@ -10,6 +11,8 @@ $(document).ready(function () {
         $('#formCadastro #Cidade').val(obj.Cidade);
         $('#formCadastro #Logradouro').val(obj.Logradouro);
         $('#formCadastro #Telefone').val(obj.Telefone);
+        $('#formCadastro #CPF').val(obj.CPF);
+        $('#formCadastro #CPFInicial').val(obj.CPFInicial);
     }
 
     $('#formCadastro').submit(function (e) {
@@ -27,7 +30,9 @@ $(document).ready(function () {
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
-                "Telefone": $(this).find("#Telefone").val()
+                "Telefone": $(this).find("#Telefone").val(),
+                "CPF": $(this).find("#CPF").val(),
+                "CPFInicial": $(this).find("#CPFInicial").val()
             },
             error:
             function (r) {
@@ -44,7 +49,17 @@ $(document).ready(function () {
             }
         });
     })
-    
+    $('#CPF').on('input', function () {
+        let cpf = $(this).val().replace(/\D/g, '');
+
+        if (cpf.length <= 11) {
+            cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+            cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+            cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        }
+
+        $(this).val(cpf);
+    });
 })
 
 function ModalDialog(titulo, texto) {

@@ -50,7 +50,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Nome = model.Nome,
                     Sobrenome = model.Sobrenome,
                     Telefone = model.Telefone,
-                    CPF = long.Parse(new string(model.CPF.Where(char.IsDigit).ToArray()))
+                    CPF = new string(model.CPF.Where(char.IsDigit).ToArray())
                 });
 
            
@@ -85,7 +85,8 @@ namespace WebAtividadeEntrevista.Controllers
                     Nacionalidade = model.Nacionalidade,
                     Nome = model.Nome,
                     Sobrenome = model.Sobrenome,
-                    Telefone = model.Telefone
+                    Telefone = model.Telefone,
+                    CPF = new string(model.CPF.Where(char.IsDigit).ToArray())
                 });
                                
                 return Json("Cadastro alterado com sucesso");
@@ -112,7 +113,9 @@ namespace WebAtividadeEntrevista.Controllers
                     Nacionalidade = cliente.Nacionalidade,
                     Nome = cliente.Nome,
                     Sobrenome = cliente.Sobrenome,
-                    Telefone = cliente.Telefone
+                    Telefone = cliente.Telefone,
+                    CPF = cliente.CPF,
+                    CPFInicial = cliente.CPF,
                 };
 
             

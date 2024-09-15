@@ -76,5 +76,10 @@ namespace WebAtividadeEntrevista.Models
         [Cpf]
         public string CPF { get; set; }
 
+        /// <summary>
+        /// CPF inicial é o valor do CPF antes de qualquer alteração
+        /// </summary>
+        public string CPFInicial { get; set; }
+
     }    
 }
