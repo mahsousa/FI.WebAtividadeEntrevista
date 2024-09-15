@@ -14,7 +14,8 @@ $(document).ready(function () {
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
-                "Telefone": $(this).find("#Telefone").val()
+                "Telefone": $(this).find("#Telefone").val(),
+                "CPF": $(this).find("#CPF").val()
             },
             error:
             function (r) {
@@ -30,8 +31,20 @@ $(document).ready(function () {
             }
         });
     })
-    
+
+    $('#CPF').on('input', function () {
+        let cpf = $(this).val().replace(/\D/g, '');
+        
+        if (cpf.length <= 11) {
+            cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+            cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+            cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        }
+        
+        $(this).val(cpf);
+    });
 })
+
 
 function ModalDialog(titulo, texto) {
     var random = Math.random().toString().replace('.', '');
