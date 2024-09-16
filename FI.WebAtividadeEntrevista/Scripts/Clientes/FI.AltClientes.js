@@ -56,7 +56,6 @@ $(document).ready(function () {
 function PopularBeneficiarios(beneficiarios) {
     if (!beneficiarios || !beneficiarios.length) return;
     for (let i = 0; i < beneficiarios.length; i++) {
-        console.log(beneficiarios[i]);
         var novaLinha = `
             <tr>
                 <td>${beneficiarios[i].CPF}</td>

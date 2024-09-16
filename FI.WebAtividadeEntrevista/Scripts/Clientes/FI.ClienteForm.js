@@ -68,7 +68,6 @@ $(document).ready(function () {
     $(document).on('click', '#btn-salvar', function () {
         var cpf = $('#CPFBenef').val();
         var nome = $('#NomeBenef').val();
-        console.log(cpf, nome, $('#CPFBenef').val(), $('#NomeBenef').val())
         if (cpf && nome) {
             var linha = $(this).data('linha');
             linha.find('td:eq(0)').text(cpf);
