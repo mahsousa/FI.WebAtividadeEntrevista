@@ -1,10 +1,7 @@
 ﻿using FI.WebAtividadeEntrevista.Atributes;
 using FI.WebAtividadeEntrevista.Models;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace WebAtividadeEntrevista.Models
 {
@@ -85,7 +82,7 @@ namespace WebAtividadeEntrevista.Models
         /// <summary>
         /// Lista de Beneficiarios
         /// </summary>
-        public List<BeneficiarioModel> Beneficiarios { get; set; }
+        public List<BeneficiarioModel> Beneficiarios { get; set; } = new List<BeneficiarioModel>();
 
     }    
 }

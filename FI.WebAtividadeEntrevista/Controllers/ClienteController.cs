@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FI.AtividadeEntrevista.DML;
+using FI.WebAtividadeEntrevista.Models;
 
 namespace WebAtividadeEntrevista.Controllers
 {
@@ -38,11 +39,6 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-
-                List<Beneficiario> beneficiarios = new List<Beneficiario>();
-                foreach(var benef in model.Beneficiarios)
-                    beneficiarios.Add(new Beneficiario() { CPF = benef.CPF, Nome = benef.Nome });
-
                 model.Id = bo.Incluir(new Cliente()
                 {
                     CEP = model.CEP,
@@ -55,7 +51,12 @@ namespace WebAtividadeEntrevista.Controllers
                     Sobrenome = model.Sobrenome,
                     Telefone = model.Telefone,
                     CPF = model.CPF,
-                    Beneficiarios = beneficiarios
+                    Beneficiarios = model.Beneficiarios.Select(b => new Beneficiario() { 
+                        Id = b.Id, 
+                        IdCliente = b.IdCliente,
+                        CPF = b.CPF,
+                        Nome = b.Nome,
+                    }).ToList()
                 });
 
            
@@ -91,7 +92,14 @@ namespace WebAtividadeEntrevista.Controllers
                     Nome = model.Nome,
                     Sobrenome = model.Sobrenome,
                     Telefone = model.Telefone,
-                    CPF = new string(model.CPF.Where(char.IsDigit).ToArray())
+                    CPF = new string(model.CPF.Where(char.IsDigit).ToArray()),
+                    Beneficiarios = model.Beneficiarios.Select(b => new Beneficiario()
+                    {
+                        Id = b.Id,
+                        IdCliente = b.IdCliente,
+                        CPF = b.CPF,
+                        Nome = b.Nome,
+                    }).ToList()
                 });
                                
                 return Json("Cadastro alterado com sucesso");
@@ -121,6 +129,12 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = cliente.Telefone,
                     CPF = cliente.CPF,
                     CPFInicial = cliente.CPF,
+                    Beneficiarios = cliente.Beneficiarios.Select(x => new BeneficiarioModel() {
+                        Id = x.Id,
+                        IdCliente = x.IdCliente,
+                        CPF = x.CPF,
+                        Nome = x.Nome,
+                    }).ToList(),
                 };
 
             

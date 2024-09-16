@@ -68,7 +68,7 @@ namespace FI.AtividadeEntrevista.DAL
             parametros.Add(new SqlParameter("Id", Id));
 
             DataSet ds = base.Consultar(ProcConsCliente, parametros);
-            List<Cliente> cli = Converter(ds);
+            List<Cliente> cli = Converter(ds, true);
 
             return cli.FirstOrDefault();
         }
@@ -94,7 +94,7 @@ namespace FI.AtividadeEntrevista.DAL
             parametros.Add(new SqlParameter("crescente", crescente));
 
             DataSet ds = base.Consultar(ProcPesqCliente, parametros);
-            List<Cliente> cli = Converter(ds);
+            List<Cliente> cli = Converter(ds, false);
 
             int iQtd = 0;
 
@@ -116,7 +116,7 @@ namespace FI.AtividadeEntrevista.DAL
             parametros.Add(new SqlParameter("Id", 0));
 
             DataSet ds = base.Consultar(ProcConsCliente, parametros);
-            List<Cliente> cli = Converter(ds);
+            List<Cliente> cli = Converter(ds, false);
 
             return cli;
         }
@@ -141,6 +141,17 @@ namespace FI.AtividadeEntrevista.DAL
             parametros.Add(new SqlParameter("CPF", cliente.CPF));
             parametros.Add(new SqlParameter("ID", cliente.Id));
 
+            var beneficiariosTable = new DataTable();
+            beneficiariosTable.Columns.Add("CPF", typeof(string));
+            beneficiariosTable.Columns.Add("Nome", typeof(string));
+
+            var beneficiariosString = string.Join(";", cliente.Beneficiarios.Select(b => $"{b.CPF}.{b.Nome}"));
+            parametros.Add(new SqlParameter("@BENEFICIARIOS", SqlDbType.NVarChar)
+            {
+                Value = beneficiariosString,
+                Size = -1 // Para NVARCHAR(MAX)
+            });
+
             base.Executar(ProcAltCliente, parametros);
         }
 
@@ -158,7 +169,7 @@ namespace FI.AtividadeEntrevista.DAL
             base.Executar(ProcDelCliente, parametros);
         }
 
-        private List<Cliente> Converter(DataSet ds)
+        private List<Cliente> Converter(DataSet ds, bool preencherBeneficiarios)
         {
             List<Cliente> lista = new List<Cliente>();
             if (ds != null && ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -178,15 +189,15 @@ namespace FI.AtividadeEntrevista.DAL
                     cli.Telefone = row.Field<string>("Telefone");
                     cli.CPF = row.Field<string>("CPF");
 
-                    if(ds.Tables.Count > 1 && ds.Tables[1].Rows.Count > 0)
+                    if(preencherBeneficiarios && ds.Tables.Count > 1 && ds.Tables[1].Rows.Count > 0)
                     {
                         foreach (DataRow benefRow in ds.Tables[1].Rows)
                         {
                             Beneficiario benef = new Beneficiario();
-                            benef.Id = row.Field<long>("Id");
-                            benef.IdCliente = row.Field<long>("Id");
-                            benef.Nome = row.Field<string>("Nome");
-                            benef.CPF = row.Field<string>("CPF");
+                            benef.Id = benefRow.Field<long>("Id");
+                            benef.IdCliente = benefRow.Field<long>("IdCliente");
+                            benef.Nome = benefRow.Field<string>("Nome");
+                            benef.CPF = benefRow.Field<string>("CPF");
                             cli.Beneficiarios.Add(benef);
                         }
                         

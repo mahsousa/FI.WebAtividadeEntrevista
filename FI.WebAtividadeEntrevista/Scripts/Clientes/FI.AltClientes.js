@@ -12,6 +12,7 @@ $(document).ready(function () {
         $('#formCadastro #Telefone').val(obj.Telefone);
         $('#formCadastro #CPF').val(obj.CPF);
         $('#formCadastro #CPFInicial').val(obj.CPFInicial);
+        PopularBeneficiarios(obj.Beneficiarios);
     }
 
     $('#formCadastro').submit(function (e) {
@@ -31,7 +32,8 @@ $(document).ready(function () {
                 "Logradouro": $(this).find("#Logradouro").val(),
                 "Telefone": $(this).find("#Telefone").val(),
                 "CPF": $(this).find("#CPF").val(),
-                "CPFInicial": $(this).find("#CPFInicial").val()
+                "CPFInicial": $(this).find("#CPFInicial").val(),
+                "Beneficiarios": CriarJsonBeneficiarios(),
             },
             error:
             function (r) {
@@ -48,39 +50,23 @@ $(document).ready(function () {
             }
         });
     })
-    $('#CPF').on('input', function () {
-        let cpf = $(this).val().replace(/\D/g, '');
-
-        if (cpf.length <= 11) {
-            cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
-            cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
-            cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-        }
-
-        $(this).val(cpf);
-    });
 })
 
-function ModalDialog(titulo, texto) {
-    var random = Math.random().toString().replace('.', '');
-    var texto = '<div id="' + random + '" class="modal fade">                                                               ' +
-        '        <div class="modal-dialog">                                                                                 ' +
-        '            <div class="modal-content">                                                                            ' +
-        '                <div class="modal-header">                                                                         ' +
-        '                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>         ' +
-        '                    <h4 class="modal-title">' + titulo + '</h4>                                                    ' +
-        '                </div>                                                                                             ' +
-        '                <div class="modal-body">                                                                           ' +
-        '                    <p>' + texto + '</p>                                                                           ' +
-        '                </div>                                                                                             ' +
-        '                <div class="modal-footer">                                                                         ' +
-        '                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>             ' +
-        '                                                                                                                   ' +
-        '                </div>                                                                                             ' +
-        '            </div><!-- /.modal-content -->                                                                         ' +
-        '  </div><!-- /.modal-dialog -->                                                                                    ' +
-        '</div> <!-- /.modal -->                                                                                        ';
 
-    $('body').append(texto);
-    $('#' + random).modal('show');
+function PopularBeneficiarios(beneficiarios) {
+    if (!beneficiarios || !beneficiarios.length) return;
+    for (let i = 0; i < beneficiarios.length; i++) {
+        console.log(beneficiarios[i]);
+        var novaLinha = `
+            <tr>
+                <td>${beneficiarios[i].CPF}</td>
+                <td>${beneficiarios[i].Nome}</td>
+                <td>
+                    <button type="button" class="btn btn-warning btn-sm btn-alterar">Alterar</button>
+                    <button type="button" class="btn btn-danger btn-sm btn-excluir">Excluir</button>
+                </td>
+            </tr>`;
+
+        $('table tbody').append(novaLinha);
+    }
 }

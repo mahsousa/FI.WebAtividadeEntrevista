@@ -7,30 +7,41 @@ namespace FI.WebAtividadeEntrevista.Atributes
 {
     public class CpfAttribute : ValidationAttribute
     {
+        private readonly string _mensagemInvalido;
+        private readonly bool _verificarUnico;
+
+        public CpfAttribute(string mensagemInvalido = "CPF inválido.", bool verificarUnico = true)
+        {
+            _mensagemInvalido = mensagemInvalido;
+            _verificarUnico = verificarUnico;
+        }
+
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var cpf = value as string;
 
             if (string.IsNullOrEmpty(cpf))
             {
-                return ValidationResult.Success; 
+                return ValidationResult.Success;
             }
 
             if (!CpfValido(cpf))
             {
-                return new ValidationResult("CPF inválido.");
+                return new ValidationResult(_mensagemInvalido);
             }
 
-            var model = validationContext.ObjectInstance as ClienteModel;
-            cpf = new string(cpf.Where(char.IsDigit).ToArray());
-
-            if (cpf != model.CPFInicial && !CpfUnico(cpf))
+            if (_verificarUnico)
             {
-                return new ValidationResult("CPF já está registrado.");
+                var model = validationContext.ObjectInstance as ClienteModel;
+                cpf = new string(cpf.Where(char.IsDigit).ToArray());
+
+                if (cpf != model.CPFInicial && !CpfUnico(cpf))
+                {
+                    return new ValidationResult("CPF já está registrado.");
+                }
             }
 
             return ValidationResult.Success;
-
         }
 
         private bool CpfValido(string cpf)

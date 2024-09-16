@@ -32,6 +32,9 @@ namespace FI.AtividadeEntrevista.BLL
         public void Alterar(DML.Cliente cliente)
         {
             DAL.DaoCliente cli = new DAL.DaoCliente();
+            cliente.CPF = ObterSomenteDigitosCPF(cliente.CPF);
+            foreach (var benef in cliente.Beneficiarios)
+                benef.CPF = ObterSomenteDigitosCPF(benef.CPF);
             cli.Alterar(cliente);
         }
 
