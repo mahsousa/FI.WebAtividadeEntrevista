@@ -29,15 +29,18 @@ BEGIN
 
     DELETE FROM BENEFICIARIOS WHERE IDCLIENTE = @Id;
 
-    ;WITH BeneficiariosCTE AS (
+    IF ISNULL(@BENEFICIARIOS, '') != ''
+        BEGIN
+        ;WITH BeneficiariosCTE AS (
+            SELECT
+                value AS Beneficiario
+            FROM STRING_SPLIT(@BENEFICIARIOS, ';')
+        )
+        INSERT INTO BENEFICIARIOS (IDCLIENTE, CPF, NOME)
         SELECT
-            value AS Beneficiario
-        FROM STRING_SPLIT(@BENEFICIARIOS, ';')
-    )
-    INSERT INTO BENEFICIARIOS (IDCLIENTE, CPF, NOME)
-    SELECT
-        @Id,
-        PARSENAME(Beneficiario, 2), -- CPF
-        PARSENAME(Beneficiario, 1)  -- NOME
-    FROM BeneficiariosCTE;
+            @Id,
+            PARSENAME(Beneficiario, 2), -- CPF
+            PARSENAME(Beneficiario, 1)  -- NOME
+        FROM BeneficiariosCTE;
+    END
 END

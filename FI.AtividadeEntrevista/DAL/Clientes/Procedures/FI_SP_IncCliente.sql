@@ -17,17 +17,20 @@ BEGIN
 
     DECLARE @CLIENTE_ID INT = SCOPE_IDENTITY();
 
-    ;WITH BeneficiariosCTE AS (
+    IF ISNULL(@BENEFICIARIOS, '') != ''
+    BEGIN
+        ;WITH BeneficiariosCTE AS (
+            SELECT
+                value AS Beneficiario
+            FROM STRING_SPLIT(@BENEFICIARIOS, ';')
+        )
+        INSERT INTO BENEFICIARIOS (IDCLIENTE, CPF, NOME)
         SELECT
-            value AS Beneficiario
-        FROM STRING_SPLIT(@BENEFICIARIOS, ';')
-    )
-    INSERT INTO BENEFICIARIOS (IDCLIENTE, CPF, NOME)
-    SELECT
-        @CLIENTE_ID,
-        PARSENAME(Beneficiario, 2), -- CPF
-        PARSENAME(Beneficiario, 1)  -- NOME
-    FROM BeneficiariosCTE;
+            @CLIENTE_ID,
+            PARSENAME(Beneficiario, 2), -- CPF
+            PARSENAME(Beneficiario, 1)  -- NOME
+        FROM BeneficiariosCTE;
+    END
 
     SELECT @CLIENTE_ID
 END
